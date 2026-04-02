@@ -70,7 +70,7 @@ Cancela o escrow e devolve os tokens ao maker.
 ```
 .
 ├── programs/
-│   └── counter-program/
+│   └── escrow/
 │       └── src/
 │           └── lib.rs          # Contrato Anchor (make, take, refund)
 ├── tests/

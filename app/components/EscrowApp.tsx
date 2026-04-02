@@ -7,7 +7,7 @@ import { Keypair, SystemProgram, LAMPORTS_PER_SOL, PublicKey } from "@solana/web
 import { useProgram } from "../lib/useProgram";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 import { BN } from "bn.js";
-import styles from "./CounterApp.module.css";
+import styles from "./EscrowApp.module.css";
 
 type TxStatus = "idle" | "loading" | "success" | "error";
 
