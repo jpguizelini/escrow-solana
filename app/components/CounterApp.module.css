@@ -1,0 +1,345 @@
+/* ── Root & Layout ─────────────────────────────────────────────────────────── */
+.root {
+  min-height: 100vh;
+  background: #f5f5f4;
+  font-family: "Inter", system-ui, sans-serif;
+  color: #1c1917;
+}
+
+/* ── Header ────────────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: #fff;
+  border-bottom: 1px solid #e7e5e4;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo {
+  font-size: 1.5rem;
+  color: #9333ea;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1c1917;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.72rem;
+  color: #a8a29e;
+  margin: 0;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ── Main ──────────────────────────────────────────────────────────────────── */
+.main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── Cards ─────────────────────────────────────────────────────────────────── */
+.card,
+.logCard {
+  border-radius: 1rem;
+  border: 1px solid #e7e5e4;
+  background: #fff;
+  padding: 1.75rem;
+}
+
+/* ── Counter Display ───────────────────────────────────────────────────────── */
+.counterSection {
+  text-align: center;
+  padding: 1rem 0 1.25rem;
+}
+
+.label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #a8a29e;
+  margin: 0 0 0.5rem;
+}
+
+.counterValue {
+  font-size: clamp(5rem, 18vw, 8rem);
+  font-weight: 800;
+  line-height: 1;
+  color: #1c1917;
+  transition: transform 0.15s ease;
+}
+
+.pulse {
+  animation: pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Status Badge ──────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  margin-top: 0.6rem;
+  padding: 0.2rem 0.8rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.badge[data-variant="success"] {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.badge[data-variant="error"] {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+/* ── Info Row ──────────────────────────────────────────────────────────────── */
+.infoRow {
+  display: flex;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.infoItem {
+  flex: 1;
+  min-width: 130px;
+  background: #fafaf9;
+  border: 1px solid #e7e5e4;
+  border-radius: 0.625rem;
+  padding: 0.65rem 0.875rem;
+}
+
+.infoLabel {
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #a8a29e;
+  margin-bottom: 0.2rem;
+}
+
+.infoValue {
+  font-size: 0.82rem;
+  font-family: "Fira Code", monospace;
+  color: #57534e;
+}
+
+.infoValue[data-status="active"]   { color: #16a34a; }
+.infoValue[data-status="inactive"] { color: #d6d3d1; }
+
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+.actions {
+  display: flex;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 0.75rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s ease;
+}
+
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+.btn:not(:disabled):hover { transform: translateY(-1px); filter: brightness(0.95); }
+.btn:not(:disabled):active { transform: scale(0.98); }
+
+.btnIcon { font-size: 0.9rem; }
+
+.btnInit {
+  background: #9333ea;
+  color: #fff;
+  width: 100%;
+  justify-content: center;
+  padding: 0.85rem;
+  font-size: 0.95rem;
+}
+
+.btnUp {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+  flex: 1;
+}
+
+.btnDown {
+  background: #fafaf9;
+  color: #78716c;
+  border: 1px solid #e7e5e4;
+  flex: 1;
+}
+
+.btnReset {
+  background: #fff7ed;
+  color: #ea580c;
+  border: 1px solid #fed7aa;
+  flex: 1;
+}
+
+.connectPrompt {
+  text-align: center;
+  color: #a8a29e;
+  font-size: 0.875rem;
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px dashed #e7e5e4;
+  border-radius: 0.75rem;
+}
+
+/* ── Transaction Log ───────────────────────────────────────────────────────── */
+.logTitle {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #a8a29e;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.875rem;
+}
+
+.logEmpty {
+  color: #d6d3d1;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 0.75rem;
+}
+
+.logList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.logEntry {
+  display: flex;
+  align-items: baseline;
+  gap: 0.625rem;
+  padding: 0.5rem 0.625rem;
+  background: #fafaf9;
+  border-radius: 0.5rem;
+  font-size: 0.78rem;
+  animation: fadeIn 0.2s ease;
+  flex-wrap: wrap;
+}
+
+.logTs       { color: #d6d3d1; font-family: monospace; flex-shrink: 0; }
+.logAction   { font-weight: 600; }
+.logOk       { color: #16a34a; }
+.logError    { color: #dc2626; }
+.logSig      { color: #a8a29e; font-family: monospace; }
+.logErrorMsg { color: #dc2626; font-size: 0.72rem; word-break: break-all; }
+
+/* ── Balance badge + Airdrop ───────────────────────────────────────────────── */
+.balanceBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fafaf9;
+  border: 1px solid #e7e5e4;
+  border-radius: 0.625rem;
+  padding: 0.35rem 0.75rem;
+}
+
+.balanceAmount {
+  font-size: 0.82rem;
+  font-family: "Fira Code", monospace;
+  color: #57534e;
+}
+
+.airdropBtn {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 0.4rem;
+  color: #16a34a;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.airdropBtn:hover:not(:disabled) { background: #dcfce7; }
+.airdropBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Warning Banner ────────────────────────────────────────────────────────── */
+.warning {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.875rem;
+  padding: 0.625rem 1.5rem;
+  background: #fff7ed;
+  border-bottom: 1px solid #fed7aa;
+  font-size: 0.85rem;
+  color: #ea580c;
+  flex-wrap: wrap;
+}
+
+.airdropBtnInline {
+  background: #ffedd5;
+  border: 1px solid #fed7aa;
+  border-radius: 0.4rem;
+  color: #ea580c;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.25rem 0.7rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.airdropBtnInline:hover:not(:disabled) { background: #fed7aa; }
+.airdropBtnInline:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .header  { padding: 0.875rem 1rem; }
+  .main    { padding: 1.25rem 1rem 3rem; }
+  .actions { flex-direction: column; }
+  .btn     { width: 100%; justify-content: center; }
+}
