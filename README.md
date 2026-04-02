@@ -74,7 +74,11 @@ Cancela o escrow e devolve os tokens ao maker.
 │       └── src/
 │           └── lib.rs          # Contrato Anchor (make, take, refund)
 ├── tests/
-│   └── escrow.ts               # Suite de testes (make, take, refund)
+│   └── escrow.ts               # Suite de testes (3 testes)
+├── scripts/
+│   ├── make-escrow.ts          # Script devnet: criar escrow
+│   ├── take-escrow.ts          # Script devnet: aceitar escrow
+│   └── refund-escrow.ts        # Script devnet: cancelar escrow
 ├── app/                        # Frontend Next.js
 ├── Anchor.toml
 └── Cargo.toml
@@ -93,11 +97,33 @@ Cancela o escrow e devolve os tokens ao maker.
 
 ## Como rodar os testes
 
+A suite de testes está em `tests/escrow.ts` e cobre **3 cenários** completos:
+
+### Teste 1 — Make escrow
+- Cria dois mints SPL (Token A e Token B) e faz airdrop de SOL para maker e taker
+- Cria as Associated Token Accounts e minta tokens para cada parte
+- Chama a instrução `make` com `deposit = 1000` e `receive = 500`
+- **Verifica** que o vault recebeu exatamente 1000 tokens de Token A
+- **Verifica** que a conta `EscrowState` foi criada com os dados corretos
+
+### Teste 2 — Take escrow
+- Parte do estado criado no teste anterior
+- Chama a instrução `take` com o taker
+- **Verifica** que o maker recebeu 500 tokens de Token B
+- **Verifica** que o taker recebeu 1000 tokens de Token A
+- **Verifica** que o vault foi fechado após a troca
+
+### Teste 3 — Refund escrow
+- Cria um novo escrow (`make` com `deposit = 500`, `receive = 200`)
+- Chama a instrução `refund` pelo maker
+- **Verifica** que o saldo de Token A do maker voltou ao valor original
+- **Verifica** que o vault foi fechado após o refund
+
 ```bash
-# Instalar dependências
+# Instalar dependências na raiz
 npm install
 
-# Rodar os testes no localnet (sobe validador automaticamente)
+# Rodar os 3 testes no localnet (sobe validador local automaticamente)
 anchor test
 ```
 
@@ -114,17 +140,102 @@ escrow
 
 ---
 
+## Testando na Devnet com os scripts
+
+Os scripts em `scripts/` permitem interagir com o programa deployado na devnet diretamente pelo terminal.
+
+### Pré-requisito dos scripts
+
+```bash
+# Instalar ts-node globalmente
+npm install -g ts-node typescript
+
+# Configurar CLI para devnet
+solana config set --url devnet
+
+# Verificar saldo (mínimo 0.1 SOL)
+solana balance
+# Se precisar: https://faucet.solana.com
+```
+
+### Passo 1 — Criar um escrow (Make)
+
+```bash
+npx ts-node scripts/make-escrow.ts <MINT_A> <MINT_B> <DEPOSIT> <RECEIVE>
+```
+
+O script imprime o endereço do `EscrowState` no final — **salve esse endereço**.
+
+Saída esperada:
+```
+✅ Escrow criado com sucesso!
+  Signature:    2Mf3X36Nh...
+  Explorer:     https://explorer.solana.com/tx/2Mf3X36Nh...?cluster=devnet
+
+📋 Salve o EscrowState para usar nos scripts take/refund:
+  EscrowState:  ABC123xyz...
+```
+
+### Passo 2a — Aceitar o escrow (Take)
+
+```bash
+npx ts-node scripts/take-escrow.ts <ESCROW_STATE_ADDRESS>
+```
+
+Saída esperada:
+```
+✅ Escrow aceito com sucesso!
+  Signature:    3Xk9...
+  Explorer:     https://explorer.solana.com/tx/3Xk9...?cluster=devnet
+```
+
+### Passo 2b — Cancelar e reembolsar (Refund)
+
+```bash
+npx ts-node scripts/refund-escrow.ts <ESCROW_STATE_ADDRESS>
+```
+
+Saída esperada:
+```
+✅ Refund realizado com sucesso!
+  Signature:    7Yw2...
+  Explorer:     https://explorer.solana.com/tx/7Yw2...?cluster=devnet
+```
+
+> **Nota:** Use `take` **ou** `refund` para um mesmo escrow, nunca os dois.
+
+---
+
+## Como rodar o frontend
+
+```bash
+cd app
+npm install
+npm run dev
+```
+
+Acesse **http://localhost:3000** no navegador.
+
+### Configuração da carteira
+
+1. Instale a extensão [Phantom Wallet](https://phantom.app/)
+2. Nas configurações da Phantom, mude a rede para **Devnet**
+3. Solicite SOL de teste em [faucet.solana.com](https://faucet.solana.com)
+4. Conecte a carteira no frontend e interaja com o escrow
+
+### Funcionalidades do frontend
+
+- **Create Escrow** — define Token A, Token B, quantidade a depositar e a receber
+- **Take Escrow** — aceita um escrow existente pelo endereço da conta `EscrowState`
+- **Refund** — cancela e recupera os tokens de um escrow criado pelo maker conectado
+
+---
+
 ## Como fazer deploy na devnet
 
 ```bash
-# Configurar para devnet
 solana config set --url devnet
-
-# Solicitar SOL para pagar o deploy
-solana airdrop 2
-# ou use https://faucet.solana.com
-
-# Build e deploy
+solana airdrop 2           # ou https://faucet.solana.com
 anchor build
 anchor deploy
 ```
